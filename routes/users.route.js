@@ -5,7 +5,7 @@ import validateUser from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/", validateUser, createUser);
+router.post("/", validateUser("President"), createUser);
 router.get("/", getUsers);
 
 export default router;

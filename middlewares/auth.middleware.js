@@ -2,45 +2,55 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.js";
 import User from "../models/users.model.js";
 
-const authorize = async (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
+const authorize = (...allowedPositions) => {
+    return async (req, res, next) => {
+        try {
+            const authHeader = req.headers.authorization;
 
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({
+            if (!authHeader || !authHeader.startsWith("Bearer ")) {
+                return res.status(401).json({
+                    status: "error",
+                    message: "Unauthorized access: request does not contain a valid authorization header",
+                });
+            }
+
+            const token = authHeader.split(" ")[1];
+
+            if (!token) {
+                return res.status(401).json({
+                    status: "error",
+                    message: "Unauthorized access: no token"
+                });
+            }
+
+            const decoded = jwt.verify(token, JWT_SECRET)
+            
+            const user = await User.findById(decoded.userId).select("-password -__v");
+
+            if (!user) {
+                return res.status(401).json({
+                    status: "error",
+                    message: "Unauthorized access: no user"
+                });
+            }
+
+            req.user = user;
+
+            if (allowedPositions.length && !allowedPositions.includes(user.position)) {
+                return res.status(403).json({
+                    status: "error",
+                    message: "Forbidden: no permission to access this resource"
+                });
+            }
+            
+            next();
+        } catch (error) {
+            res.status(401).json({
                 status: "error",
-                message: "Unauthorized access: request does not contain a valid authorization header",
+                message: "Unauthorized access",
+                error: error.message,
             });
-        }
-
-        const token = authHeader.split(" ")[1];
-
-        if (!token) {
-            return res.status(401).json({
-                status: "error",
-                message: "Unauthorized access: no token"
-            });
-        }
-
-        const decoded = jwt.verify(token, JWT_SECRET)
-        
-        const user = await User.findById(decoded.userId).select("-password -__v");
-
-        if (!user) {
-            return res.status(401).json({
-                status: "error",
-                message: "Unauthorized access: no user"
-            });
-        }
-
-        req.user = user;
-        next();
-    } catch (error) {
-        res.status(401).json({
-            status: "error",
-            message: "Unauthorized access",
-            error: error.message,
-        });
+        };
     };
 };
 
