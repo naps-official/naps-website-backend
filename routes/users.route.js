@@ -1,12 +1,9 @@
 import { Router } from "express";
 
+import { createUser } from "../controllers/user.controller.js";
+
 const router = Router();
 
-router.get("/", (_, res) => {
-    res.status(200).json({
-        status: "success",
-        message: "Users fetched successfully"
-    })
-});
+router.post("/", createUser);
 
 export default router;
