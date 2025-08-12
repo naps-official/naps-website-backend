@@ -40,3 +40,18 @@ export const createUser = async (req, res, next) => {
         next(error);
     };
 };
+
+export const getUsers = async (_, res, next) => {
+    try {
+        const users = await User.find().select("-password");
+
+        res.status(200).json({
+            status: "success",
+            message: "Users fetched successfully",
+            data: users,
+            total_count: users.length,
+        });
+    } catch (error) {
+        next(error);
+    };
+};
