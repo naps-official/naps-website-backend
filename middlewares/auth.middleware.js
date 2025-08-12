@@ -9,7 +9,7 @@ const authorize = async (req, res, next) => {
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
                 status: "error",
-                message: "Unauthorized access",
+                message: "Unauthorized access no bearer",
             });
         }
 
@@ -18,18 +18,18 @@ const authorize = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({
                 status: "error",
-                message: "Unauthorized access"
+                message: "Unauthorized access no token"
             });
         }
 
         const decoded = jwt.verify(token, JWT_SECRET)
         
-        const user = await User.findById(decoded.id).select("-password -__v");
+        const user = await User.findById(decoded.userId).select("-password -__v");
 
         if (!user) {
             return res.status(401).json({
                 status: "error",
-                message: "Unauthorized access"
+                message: "Unauthorized access no user"
             });
         }
 
@@ -38,7 +38,7 @@ const authorize = async (req, res, next) => {
     } catch (error) {
         res.status(401).json({
             status: "error",
-            message: "Unauthorized access",
+            message: "Unauthorized access  jsdfjsk",
             error: error.message,
         });
     };
