@@ -54,3 +54,31 @@ export const getUsers = async (_, res, next) => {
         next(error);
     };
 };
+
+export const getUserById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            const error = new Error("User ID is required");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const user = await User.findById(id).select("-password");
+
+        if (!user) {
+            const error = new Error("User not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        res.status(200).json({
+            status: "success",
+            message: "User fetched successfully",
+            data: user,
+        });
+    } catch (error) {
+        next(error);
+    };
+}
