@@ -3,14 +3,22 @@ import User from "../models/users.model.js";
 export const createUser = async (req, res, next) => {
     try {
         const { fullName, password, position } = req.body;
-        const username = fullName;
 
         if (!fullName || !password || !position) {
-            return res.status(400).json({
-                status: "error",
-                message: "Full name, password, and position are required fields.",
-            });
+            const error = new Error("All fields are required");
+            error.statusCode = 400;
+            throw error;
         };
+
+        const username = fullName;
+
+        const existingUser = await User.findOne({ username });
+
+        if (existingUser) {
+            const error = new Error("User already exists");
+            error.statusCode = 400;
+            throw error;
+        }
 
         const newUser = new User({
             fullName,
