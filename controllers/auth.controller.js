@@ -33,13 +33,16 @@ export const signIn = async (req, res, next) => {
             { expiresIn: JWT_EXPIRATION}
         );
 
+        const userObj = user.toObject();
+        delete userObj.password;
+
         res.status(200).json({
             status: "success",
             message: "User signed in successfully",
             data: {
                 token,
-                user
-            }
+                userObj,
+            },
         });
     } catch (error) {
         next(error);
