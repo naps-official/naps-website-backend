@@ -4,12 +4,14 @@ import { PORT, MONGO_URI } from "./config/env.js";
 import connectDB from "./db/connectdb.js";
 import newsRouter from "./routes/news.route.js"
 import usersRouter from "./routes/users.route.js"
+import errorMiddleware from "./middlewares/error.middleware.js";
 
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(errorMiddleware);
 
 // Routes
 app.get("/", (req, res) => {
