@@ -41,7 +41,7 @@ export const signIn = async (req, res, next) => {
             message: "User signed in successfully",
             data: {
                 token,
-                userObj,
+                user: userObj,
             },
         });
     } catch (error) {
