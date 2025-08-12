@@ -4,7 +4,7 @@ export const createUser = async (req, res, next) => {
     try {
         const { fullName, position } = req.body;
 
-        if (!fullName || !password || !position) {
+        if (!fullName || !position) {
             const error = new Error("All fields are required");
             error.statusCode = 400;
             throw error;
