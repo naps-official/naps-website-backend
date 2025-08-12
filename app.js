@@ -11,15 +11,16 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/api/v1/news", newsRouter)
+app.use("/api/v1/users", usersRouter)
+
 app.use(errorMiddleware);
 
 // Routes
 app.get("/", (req, res) => {
     res.send("Welcome to Nigerian Association of Physitherapy Students!");
 });
-
-app.use("/api/v1/news", newsRouter)
-app.use("/api/v1/users", usersRouter)
 
 const startServer = async () => {
     try {
