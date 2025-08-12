@@ -27,7 +27,6 @@ export const createUser = async (req, res) => {
             data: user,
         });
     } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({ error: "Internal server error" });
+        next(error);
     };
 };
