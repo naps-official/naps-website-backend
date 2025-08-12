@@ -2,7 +2,7 @@ import User from "../models/users.model.js";
 
 export const createUser = async (req, res, next) => {
     try {
-        const { fullName, password, position } = req.body;
+        const { fullName, position } = req.body;
 
         if (!fullName || !password || !position) {
             const error = new Error("All fields are required");
@@ -22,7 +22,6 @@ export const createUser = async (req, res, next) => {
 
         const newUser = new User({
             fullName,
-            password,
             position,
             username,
         });
