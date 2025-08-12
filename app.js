@@ -6,7 +6,6 @@ import newsRouter from "./routes/news.route.js"
 import usersRouter from "./routes/users.route.js"
 import errorMiddleware from "./middlewares/error.middleware.js";
 
-
 const app = express();
 
 app.use(express.json());
