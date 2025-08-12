@@ -82,3 +82,30 @@ export const getUserById = async (req, res, next) => {
         next(error);
     };
 }
+
+export const deleteUser = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            const error = new Error("User ID is required");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const user = await User.findOneAndDelete({ _id: id});
+
+        if (!user) {
+            const error = new Error("User not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        res.status(204).json({
+            status: "success",
+            message: "User deleted successfully",
+        });
+    } catch (error) {
+        next(error);
+    };
+}
