@@ -3,6 +3,7 @@ import User from "../models/users.model.js";
 export const createUser = async (req, res) => {
     try {
         const { fullName, password, position } = req.body;
+        const username = fullName;
 
         if (!fullName || !password || !position) {
             return res.status(400).json({
@@ -15,6 +16,7 @@ export const createUser = async (req, res) => {
             fullName,
             password,
             position,
+            username,
         });
 
         const user = await newUser.save();
@@ -22,7 +24,7 @@ export const createUser = async (req, res) => {
         return res.status(201).json({
             status: "success",
             message: "User created successfully",
-            data: { ...user },
+            data: user,
         });
     } catch (error) {
         console.error(error.message);
