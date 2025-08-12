@@ -28,11 +28,13 @@ export const createUser = async (req, res, next) => {
         });
 
         const user = await newUser.save();
+        const userObj = user.toObject();
+        delete userObj.password;
 
         return res.status(201).json({
             status: "success",
             message: "User created successfully",
-            data: user,
+            data: userObj,
         });
     } catch (error) {
         next(error);
