@@ -9,7 +9,7 @@ const authorize = async (req, res, next) => {
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
                 status: "error",
-                message: "Unauthorized access no bearer",
+                message: "Unauthorized access: request does not contain a valid authorization header",
             });
         }
 
@@ -18,7 +18,7 @@ const authorize = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({
                 status: "error",
-                message: "Unauthorized access no token"
+                message: "Unauthorized access: no token"
             });
         }
 
@@ -29,7 +29,7 @@ const authorize = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({
                 status: "error",
-                message: "Unauthorized access no user"
+                message: "Unauthorized access: no user"
             });
         }
 
@@ -38,7 +38,7 @@ const authorize = async (req, res, next) => {
     } catch (error) {
         res.status(401).json({
             status: "error",
-            message: "Unauthorized access  jsdfjsk",
+            message: "Unauthorized access",
             error: error.message,
         });
     };
