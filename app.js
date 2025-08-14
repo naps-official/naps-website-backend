@@ -5,7 +5,6 @@ import connectDB from "./db/connectdb.js";
 import authRouter from "./routes/auth.route.js";
 import newsRouter from "./routes/news.route.js"
 import usersRouter from "./routes/users.route.js"
-import newsRouter from "./routes/news.route.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 
 const app = express();
