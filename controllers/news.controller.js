@@ -23,7 +23,7 @@ export const createNews = async (req, res, next) => {
 
         await savedNews.populate({
             path: "author",
-            select: "fullName username position -_id -password"
+            select: "fullName username position -_id"
         });
 
         res.status(201).json({
