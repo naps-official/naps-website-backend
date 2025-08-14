@@ -2,17 +2,19 @@ import News from "../models/news.models.js";
 
 export const getAllNews = async (_, res, next) => {
     try {
-        const news = await News.find();
+        const news = await News
+        .find()
+        .populate({
+            path: "author",
+            select: "fullName username position -_id"
+        })
+        .sort({ createdAt: -1 });
 
-        // await news.populate({
-        //     path: "author",
-        //     select: "fullName username position -_id"
-        // });
-        
         res.status(200).json({
             status: "success",
             message: "All news fetched successfully",
             data: news,
+            total_count: news.length,
         });
     } catch (error) {
         next(error);
