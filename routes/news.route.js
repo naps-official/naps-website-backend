@@ -1,5 +1,8 @@
 import { Router } from "express";
 
+import { createNews } from "../controllers/news.controller.js";
+import validateUser from "../middlewares/auth.middleware.js";
+
 const router = Router();
 
 // Get all News
@@ -11,12 +14,7 @@ router.get("/", (req, res) => {
 });
 
 // Create News
-router.post("/", (req, res) => {
-    res.status(201).json({
-        status: "success",
-        message: "News created successfully"
-    });
-});
+router.post("/", validateUser(), createNews);
 
 // Get one post
 router.get("/:id", (req, res) => {
