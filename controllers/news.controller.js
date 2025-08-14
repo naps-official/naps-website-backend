@@ -89,10 +89,7 @@ export const deleteNews = async (req, res, next) => {
 
     await News.findByIdAndDelete(id);
 
-    res.status(204).json({
-      status: "success",
-      message: `News with ID ${id} deleted successfully`,
-    });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
