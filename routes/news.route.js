@@ -4,6 +4,7 @@ import {
   createNews,
   getAllNews,
   getNewsById,
+  deleteNews,
 } from "../controllers/news.controller.js";
 import validateUser from "../middlewares/auth.middleware.js";
 
@@ -28,8 +29,6 @@ router.patch("/:id", (req, res) => {
 });
 
 // Delete one post
-router.delete("/:id", (req, res) => {
-  res.status(204).end();
-});
+router.delete("/:id", validateUser(), deleteNews);
 
 export default router;
