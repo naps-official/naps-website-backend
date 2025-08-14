@@ -11,7 +11,7 @@ export const getAllNews = async (_, res, next) => {
         
         res.status(200).json({
             status: "success",
-            message: "ALl news fetched successfully",
+            message: "All news fetched successfully",
             data: news,
         });
     } catch (error) {
