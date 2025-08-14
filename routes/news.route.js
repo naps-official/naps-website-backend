@@ -1,6 +1,10 @@
 import { Router } from "express";
 
-import { createNews, getAllNews } from "../controllers/news.controller.js";
+import {
+  createNews,
+  getAllNews,
+  getNewsById,
+} from "../controllers/news.controller.js";
 import validateUser from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -12,26 +16,20 @@ router.get("/", getAllNews);
 router.post("/", validateUser(), createNews);
 
 // Get one post
-router.get("/:id", (req, res) => {
-    const { id } = req.params
-    res.status(200).json({
-        status: "success",
-        message: `News with id ${id} fetched successfully`
-    });
-});
+router.get("/:id", getNewsById);
 
 // Patch one post
 router.patch("/:id", (req, res) => {
-    const { id } = req.params
-    res.status(200).json({
-        status: "success",
-        message: `News with id ${id} updated successfully`
-    });
+  const { id } = req.params;
+  res.status(200).json({
+    status: "success",
+    message: `News with id ${id} updated successfully`,
+  });
 });
 
 // Delete one post
 router.delete("/:id", (req, res) => {
-    res.status(204).end();
+  res.status(204).end();
 });
 
 export default router;
