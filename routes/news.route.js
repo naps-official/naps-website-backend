@@ -1,17 +1,12 @@
 import { Router } from "express";
 
-import { createNews } from "../controllers/news.controller.js";
+import { createNews, getAllNews } from "../controllers/news.controller.js";
 import validateUser from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
 // Get all News
-router.get("/", (req, res) => {
-    res.status(200).json({
-        status: "success",
-        message: "All news fetched successfully"
-    });
-});
+router.get("/", getAllNews);
 
 // Create News
 router.post("/", validateUser(), createNews);
