@@ -24,12 +24,6 @@ export const getNewsById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    if (!id) {
-      const error = new Error("ID must be provided");
-      error.statusCode = 400;
-      throw error;
-    }
-
     const news = await News.findById(id);
 
     if (!news) {
