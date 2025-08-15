@@ -85,3 +85,14 @@ export const deleteNews = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateNews = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const newsToUpdate = await News.findByIdAndUpdate(id, { ...req.body });
+    console.log(newsToUpdate);
+  } catch (error) {
+    next(error);
+  }
+};
