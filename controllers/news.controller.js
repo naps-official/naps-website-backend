@@ -4,16 +4,29 @@ export const getAllNews = async (_, res, next) => {
   try {
     const news = await News.find()
       .populate({
-        path: "author",
+        path: "author.user",
         select: "fullName username position -_id",
       })
       .sort({ createdAt: -1 });
 
+    const processedNews = news.map((item) => {
+      if (!item.author.user) {
+        return {
+          ...item.toObject(),
+          author: {
+            fullName: item.author.fullName,
+            username: item.author.username,
+          },
+        };
+      }
+      return item;
+    });
+
     res.status(200).json({
       status: "success",
       message: "All news fetched successfully",
-      data: news,
-      total_count: news.length,
+      data: processedNews,
+      total_count: processedNews.length,
     });
   } catch (error) {
     next(error);
