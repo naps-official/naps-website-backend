@@ -27,11 +27,6 @@ export const getNewsById = async (req, res, next) => {
       throw error;
     }
 
-    await news.populate({
-      path: "author",
-      select: "fullName username position -_id",
-    });
-
     res.status(200).json({
       status: "success",
       message: "News fetched successfully",
