@@ -10,7 +10,7 @@ export const createUser = async (req, res, next) => {
       throw error;
     }
 
-    const username = fullName;
+    const username = fullName.toLowerCase().split(" ").join();
 
     const existingUser = await User.findOne({ username });
 
