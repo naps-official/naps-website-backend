@@ -26,12 +26,10 @@ const newsSchema = new mongoose.Schema(
     },
 
     author: {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+      full_name: {
+        type: String,
+        required: true,
       },
-      fullName: String,
-      username: String,
     },
 
     status: {
