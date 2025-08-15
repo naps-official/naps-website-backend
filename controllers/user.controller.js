@@ -105,17 +105,19 @@ export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      { ...req.body },
-      { new: true }
-    );
+    const user = await User.findByIdAndUpdate(id, {
+      ...req.body,
+    });
 
     if (!user) {
       const error = new Error(`User with id ${id} cannot be found`);
       error.statusCode = 404;
       throw error;
     }
+
+    if (req.body.password) return; // ! allow this to pass but without allowing password change
+
+    // ! fix update password route and controller
 
     res.status(200).json({
       status: "success",
