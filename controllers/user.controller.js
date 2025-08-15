@@ -100,3 +100,29 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      { ...req.body },
+      { new: true }
+    );
+
+    if (!user) {
+      const error = new Error(`User with id ${id} cannot be found`);
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "User updated successfully",
+      data: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
