@@ -26,7 +26,7 @@ const newsSchema = new mongoose.Schema(
     },
 
     author: {
-      full_name: {
+      fullName: {
         type: String,
         required: true,
       },
