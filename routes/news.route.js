@@ -5,6 +5,7 @@ import {
   getAllNews,
   getNewsById,
   deleteNews,
+  updateNews,
 } from "../controllers/news.controller.js";
 import validateUser from "../middlewares/auth.middleware.js";
 
@@ -20,13 +21,7 @@ router.post("/", validateUser(), createNews);
 router.get("/:id", getNewsById);
 
 // Patch one post
-router.patch("/:id", (req, res) => {
-  const { id } = req.params;
-  res.status(200).json({
-    status: "success",
-    message: `News with id ${id} updated successfully`,
-  });
-});
+router.patch("/:id", validateUser, updateNews);
 
 // Delete one post
 router.delete("/:id", validateUser(), deleteNews);
