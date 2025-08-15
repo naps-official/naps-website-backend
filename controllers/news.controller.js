@@ -75,9 +75,7 @@ export const createNews = async (req, res, next) => {
       content,
       image,
       author: {
-        user: req.user._id,
         fullName: req.user.fullName,
-        username: req.user.username,
       },
     });
 
