@@ -91,7 +91,19 @@ export const updateNews = async (req, res, next) => {
     const { id } = req.params;
 
     const newsToUpdate = await News.findByIdAndUpdate(id, { ...req.body });
+
+    if (!newsToUpdate) {
+      const error = new Error(`News with id ${id} cannot be found`);
+      error.statusCode = 404;
+      throw error;
+    }
     console.log(newsToUpdate);
+
+    res.status(200).json({
+      status: "success",
+      message: "News updated successfully",
+      data: newsToUpdate,
+    });
   } catch (error) {
     next(error);
   }
