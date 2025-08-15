@@ -87,7 +87,13 @@ export const deleteNews = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    await News.findByIdAndDelete(id);
+    const news = await News.findByIdAndDelete(id);
+
+    if (!news) {
+      const error = new Error(`News with ID ${id} cannot be found`);
+      error.statusCode = 404;
+      throw error;
+    }
 
     res.status(204).end();
   } catch (error) {
