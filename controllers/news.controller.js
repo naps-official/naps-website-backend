@@ -27,7 +27,7 @@ export const getNewsById = async (req, res, next) => {
     const news = await News.findById(id);
 
     if (!news) {
-      const error = new Error(`News with ID ${id} does not exist!`);
+      const error = new Error(`News with ID ${id} cannot be found`);
       error.statusCode = 404;
       throw error;
     }
