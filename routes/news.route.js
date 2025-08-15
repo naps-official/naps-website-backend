@@ -21,7 +21,7 @@ router.post("/", validateUser(), createNews);
 router.get("/:id", getNewsById);
 
 // Patch one post
-router.patch("/:id", validateUser, updateNews);
+router.patch("/:id", validateUser(), updateNews);
 
 // Delete one post
 router.delete("/:id", validateUser(), deleteNews);
