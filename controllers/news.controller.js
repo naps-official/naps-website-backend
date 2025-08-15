@@ -57,21 +57,18 @@ export const createNews = async (req, res, next) => {
       throw error;
     }
 
-    const author = req.user._id;
-
     const news = new News({
       title,
       content,
       image,
-      author,
+      author: {
+        user: req.user._id,
+        fullName: req.user.fullName,
+        username: req.user.username,
+      },
     });
 
     const savedNews = await news.save();
-
-    await savedNews.populate({
-      path: "author",
-      select: "fullName username position -_id",
-    });
 
     res.status(201).json({
       status: "success",
