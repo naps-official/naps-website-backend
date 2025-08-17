@@ -115,10 +115,6 @@ export const updateUser = async (req, res, next) => {
       throw error;
     }
 
-    if (req.body.password) return; // ! allow this to pass but without allowing password change
-
-    // ! fix update password route and controller
-
     res.status(200).json({
       status: "success",
       message: "User updated successfully",
