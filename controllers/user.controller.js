@@ -1,4 +1,6 @@
 import User from "../models/users.model.js";
+import bcrypt from "bcryptjs";
+import { hashPassword } from "../utils/index.js";
 
 export const createUser = async (req, res, next) => {
   try {
@@ -119,6 +121,42 @@ export const updateUser = async (req, res, next) => {
       status: "success",
       message: "User updated successfully",
       data: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const id = req.user._id;
+    const { oldPassword, newPassword } = req.body;
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const isValid = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isValid) {
+      const error = new Error("Password does not match");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const newHashedPassword = await hashPassword(newPassword);
+    await user.updateOne({ id }, { $set: { password: newHashedPassword } });
+    const userObj = user.toObject;
+    delete userObj.password;
+
+    res.status(200).json({
+      status: "success",
+      message: "Password changed successfully",
+      data: userObj,
     });
   } catch (error) {
     next(error);
