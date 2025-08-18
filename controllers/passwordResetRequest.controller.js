@@ -1,4 +1,4 @@
-import PasswordRequest from "../models/passwordRequest.model";
+import PasswordRequest from "../models/passwordRequest.model.js";
 
 export const getAllRequests = async (_, res, next) => {
   try {
