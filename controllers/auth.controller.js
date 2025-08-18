@@ -99,7 +99,7 @@ export const resetPasswordRequest = async (req, res, next) => {
   try {
     const { username, position } = req.body;
 
-    if (!username && position) {
+    if (!username && !position) {
       const error = new Error("Username or position is required");
       error.statusCode = 400;
       throw error;
