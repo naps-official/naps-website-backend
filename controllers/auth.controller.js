@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 import User from "../models/users.model.js";
 import PasswordRequest from "../models/passwordRequest.model.js";
@@ -121,6 +122,67 @@ export const resetPasswordRequest = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       message: "Password reset request created successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handleResetPasswordRequest = async (req, res, next) => {
+  try {
+    const { requestId, requestStatus } = req.body;
+
+    if (!requestId && requestStatus) {
+      const error = new Error("Request ID and request status is required");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const resetPasswordRequest = await PasswordRequest.findById(
+      requestId
+    ).populate({
+      path: "user",
+      select: "-password",
+    });
+
+    if (!resetPasswordRequest) {
+      const error = new Error("Password Reset Request can not be found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (resetPasswordRequest.status !== "pending") {
+      return res.status(200).json({
+        status: "success",
+        message: `Reset Password Request has already been ${resetPasswordRequest.status}`,
+      });
+    }
+
+    resetPasswordRequest.status = requestStatus;
+
+    if (requestStatus === "rejected") {
+      await resetRequestPassword.save();
+      return res.status(200).json({
+        status: "success",
+        message: "Reset Password Request rejected",
+      });
+    }
+
+    const user = resetPasswordRequest.user;
+    const newPassword = crypto.randomBytes(8).toString("hex");
+
+    user.password = newPassword;
+
+    await resetPasswordRequest.save();
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Password reset successfully",
+      data: {
+        newPassword,
+        resetPasswordRequest,
+      },
     });
   } catch (error) {
     next(error);
