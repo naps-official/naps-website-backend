@@ -109,7 +109,7 @@ export const resetPasswordRequest = async (req, res, next) => {
 
     if (!user) {
       const error = new Error("Invalid username or position");
-      error.statusCode = 404;
+      error.statusCode = 400;
       throw error;
     }
 
