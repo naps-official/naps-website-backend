@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "../models/users.model.js";
+import PasswordRequest from "../models/passwordRequest.model.js";
 import { JWT_SECRET, JWT_EXPIRATION } from "../config/env.js";
 
 export const signIn = async (req, res, next) => {
@@ -88,6 +89,38 @@ export const changePassword = async (req, res, next) => {
       status: "success",
       message: "Password changed successfully",
       data: userObj,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPasswordRequest = async (req, res, next) => {
+  try {
+    const { username, position } = req.body;
+
+    if (!username && position) {
+      const error = new Error("Username or position is required");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const user = await User.findOne({ username, position });
+
+    if (!user) {
+      const error = new Error("Invalid username or position");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const passwordRequest = new PasswordRequest({
+      user: user._id,
+    });
+    await passwordRequest.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Password reset request created successfully",
     });
   } catch (error) {
     next(error);
