@@ -1,26 +1,47 @@
 import { v2 as cloudinary } from "cloudinary";
+import * as cheerio from "cheerio";
 
 const uploadImage = async (req, _, next) => {
-  if (req.body.image) {
-    try {
-      const publicId = `IMG_${Date.now()}`;
+  const { content, image } = req.body;
+  const uploads = [];
 
-      const result = await cloudinary.uploader.upload(req.body.image, {
-        folder: "naps_folder",
-        public_id: publicId,
-        overwrite: true,
+  try {
+    if (content) {
+      const $ = cheerio.load(content);
+      const embeddedImages = $("img");
+
+      embeddedImages.each(async (i, img) => {
+        const src = $(img).attr("src");
+
+        if (src && src.startsWith("data:image")) {
+          const result = await cloudinary.uploader.upload(src, {
+            folder: "contents_images",
+            public_id: `IMG_${Date.now()}_${i}`,
+            overwrite: true,
+          });
+          $(img).attr("src", result.secure_url);
+          uploads.push(result);
+        }
       });
 
-      req.body.image = result.secure_url;
-      next();
-    } catch (error) {
-      console.error(error.message);
-      const err = new Error("Image upload failed");
-      err.statusCode = 500;
-      next(err);
+      await Promise.all(uploads);
+      req.body.content = $.html();
     }
-  } else {
+
+    if (image && typeof image === "string" && image.startsWith("data:image")) {
+      const result = await cloudinary.uploader.upload(image, {
+        folder: "users_images",
+        publid_id: `IMG_${Date.now()}`,
+        overwrite: true,
+      });
+      req.body.image = result.secure_url;
+    }
+
     next();
+  } catch (error) {
+    const err = new Error(`${error.message}`);
+    err.statusCode = 500;
+    next(err);
   }
 };
 
