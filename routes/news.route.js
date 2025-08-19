@@ -8,6 +8,7 @@ import {
   updateNews,
 } from "../controllers/news.controller.js";
 import validateUser from "../middlewares/auth.middleware.js";
+import uploadImage from "../middlewares/uploadImage.middleware.js";
 
 const router = Router();
 
@@ -15,13 +16,13 @@ const router = Router();
 router.get("/", getAllNews);
 
 // Create News
-router.post("/", validateUser(), createNews);
+router.post("/", validateUser(), uploadImage, createNews);
 
 // Get one post
 router.get("/:id", getNewsById);
 
 // Patch one post
-router.patch("/:id", validateUser(), updateNews);
+router.patch("/:id", validateUser(), uploadImage, updateNews);
 
 // Delete one post
 router.delete("/:id", validateUser(), deleteNews);
