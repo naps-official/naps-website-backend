@@ -1,3 +1,5 @@
+import { v2 as cloudinary } from "cloudinary";
+
 import News from "../models/news.models.js";
 
 export const getAllNews = async (_, res, next) => {
@@ -47,10 +49,23 @@ export const createNews = async (req, res, next) => {
       throw error;
     }
 
+    let imageUrl = "";
+
+    if (image) {
+      const publicId = `IMG_${Date.now()}`;
+      const result = await cloudinary.uploader.upload(image, {
+        folder: "news_folder",
+        public_id: publicId,
+        overwrite: true,
+      });
+
+      imageUrl = result.secure_url;
+    }
+
     const news = new News({
       title,
       content,
-      image,
+      image: imageUrl,
       author: {
         fullName: req.user.fullName,
       },
