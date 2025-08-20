@@ -47,8 +47,6 @@ export const createNews = async (req, res, next) => {
       throw error;
     }
 
-    console.log(image);
-
     const news = new News({
       title,
       content,
