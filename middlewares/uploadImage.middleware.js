@@ -31,7 +31,7 @@ const uploadImage = async (req, _, next) => {
     if (image && typeof image === "string" && image.startsWith("data:image")) {
       const result = await cloudinary.uploader.upload(image, {
         folder: "users_images",
-        publid_id: `IMG_${Date.now()}`,
+        public_id: `IMG_${Date.now()}`,
         overwrite: true,
       });
       req.body.image = result.secure_url;
