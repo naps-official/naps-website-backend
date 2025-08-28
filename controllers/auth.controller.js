@@ -35,9 +35,6 @@ export const signIn = async (req, res, next) => {
       { expiresIn: JWT_EXPIRATION }
     );
 
-    user.isFirstLogin = false;
-    await user.save();
-
     const userObj = user.toObject();
     delete userObj.password;
 
