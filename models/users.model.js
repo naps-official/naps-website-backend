@@ -35,6 +35,11 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+
+    isFirstLogin: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
